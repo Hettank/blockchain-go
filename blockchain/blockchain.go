@@ -1,6 +1,9 @@
 package blockchain
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+)
 
 type Blockchain struct {
 	Blocks []*Block
@@ -25,12 +28,12 @@ func (bc *Blockchain) AddBlock(data string) {
 	bc.Blocks = append(bc.Blocks, newBlock)
 }
 
-func (bc *Blockchain) PrintBlockchain() {
+func (bc *Blockchain) Print() {
 	fmt.Println("=========================")
 
 	for i, block := range bc.Blocks {
 		fmt.Printf("\n Block %d:\n", i)
-		fmt.Printf("   Address: %p\n", block)
+		fmt.Printf("   Timestamp: %d\n", block.Timestamp)
 		fmt.Printf("   Data: %s\n", block.Data)
 		fmt.Printf("   Hash: %x\n", block.Hash)
 
@@ -39,4 +42,27 @@ func (bc *Blockchain) PrintBlockchain() {
 		}
 	}
 	fmt.Println("=========================")
+}
+
+func (bc *Blockchain) Validate() bool {
+	for i := 0; i < len(bc.Blocks); i++ {
+		currentBlock := bc.Blocks[i]
+
+		storedHash := currentBlock.Hash
+		recalculatedHash := currentBlock.GenerateHash()
+
+		if !bytes.Equal(storedHash, recalculatedHash) {
+			return false
+		}
+	}
+
+	for i := 1; i < len(bc.Blocks); i++ {
+		currentBlock := bc.Blocks[i]
+		previousBlock := bc.Blocks[i-1]
+
+		if string(currentBlock.PrevHash) != string(previousBlock.Hash) {
+			return false
+		}
+	}
+	return true
 }
