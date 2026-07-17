@@ -22,9 +22,6 @@ func main() {
 
 	// Tamper
 	// bc.Blocks[2].Data = "Hello World"
-	bc.Blocks[2].Data = "Hello World"
-
-	bc.Blocks[2].Hash = bc.Blocks[2].GenerateHash()
 
 	// Validate again
 	if bc.Validate() {

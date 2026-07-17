@@ -9,6 +9,8 @@ type Blockchain struct {
 	Blocks []*Block
 }
 
+var difficulty = 1
+
 func NewBlockchain() *Blockchain {
 	genesisBlock := NewBlock("Genesis Block", []byte{})
 
@@ -24,7 +26,13 @@ func (bc *Blockchain) GetLatestBlock() *Block {
 func (bc *Blockchain) AddBlock(data string) {
 	latestBlock := bc.GetLatestBlock()
 
+	// Create the block
 	newBlock := NewBlock(data, latestBlock.Hash)
+
+	// Mine a block
+	newBlock.MineBlock(difficulty)
+
+	// Append to the blockchain
 	bc.Blocks = append(bc.Blocks, newBlock)
 }
 

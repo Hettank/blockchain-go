@@ -11,6 +11,7 @@ type Block struct {
 	Data      string
 	PrevHash  []byte
 	Hash      []byte
+	Nonce     int64
 }
 
 func NewBlock(data string, prevHash []byte) *Block {
@@ -26,7 +27,7 @@ func NewBlock(data string, prevHash []byte) *Block {
 }
 
 func (b *Block) GenerateHash() []byte {
-	info := fmt.Sprintf("%d%s%s", b.Timestamp, b.Data, b.PrevHash)
+	info := fmt.Sprintf("%d%s%x%d", b.Timestamp, b.Data, b.PrevHash, b.Nonce)
 	hash := sha256.Sum256([]byte(info))
 
 	return hash[:]
