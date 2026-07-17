@@ -21,7 +21,7 @@ func (b *Block) MineBlock(difficulty int) {
 
 		if len(hashString) >= difficulty && hashString[:difficulty] == targetString {
 			b.Hash = hash
-			fmt.Printf("✅ Block mined! Nonce: %d, Hash: %x\n", b.Nonce, hash[:8])
+			fmt.Printf("Block mined! Nonce: %d, Hash: %x\n", b.Nonce, hash[:8])
 			return
 		}
 

@@ -15,9 +15,9 @@ func main() {
 
 	// Validate
 	if bc.Validate() {
-		fmt.Println("✅ Blockchain is valid!")
+		fmt.Println("Blockchain is valid!")
 	} else {
-		fmt.Println("❌ Blockchain is INVALID!")
+		fmt.Println("Blockchain is INVALID!")
 	}
 
 	// Tamper
@@ -25,8 +25,8 @@ func main() {
 
 	// Validate again
 	if bc.Validate() {
-		fmt.Println("✅ Blockchain is valid!")
+		fmt.Println("Blockchain is valid!")
 	} else {
-		fmt.Println("❌ Blockchain is INVALID!")
+		fmt.Println("Blockchain is INVALID!")
 	}
 }
