@@ -3,6 +3,8 @@ package blockchain
 import (
 	"bytes"
 	"fmt"
+	"strings"
+	"time"
 )
 
 type Blockchain struct {
@@ -12,7 +14,9 @@ type Blockchain struct {
 var difficulty = 1
 
 func NewBlockchain() *Blockchain {
-	genesisBlock := NewBlock("Genesis Block", []byte{})
+	genesisBlock := NewBlock([]Transaction{}, []byte{})
+
+	genesisBlock.MineBlock(difficulty)
 
 	return &Blockchain{
 		Blocks: []*Block{genesisBlock},
@@ -23,11 +27,11 @@ func (bc *Blockchain) GetLatestBlock() *Block {
 	return bc.Blocks[len(bc.Blocks)-1]
 }
 
-func (bc *Blockchain) AddBlock(data string) {
+func (bc *Blockchain) AddBlock(transaction []Transaction) {
 	latestBlock := bc.GetLatestBlock()
 
 	// Create the block
-	newBlock := NewBlock(data, latestBlock.Hash)
+	newBlock := NewBlock(transaction, latestBlock.Hash)
 
 	// Mine a block
 	newBlock.MineBlock(difficulty)
@@ -37,19 +41,33 @@ func (bc *Blockchain) AddBlock(data string) {
 }
 
 func (bc *Blockchain) Print() {
-	fmt.Println("=========================")
+	fmt.Println("\n" + strings.Repeat("=", 60))
+	fmt.Printf("  BLOCKCHAIN\n")
+	fmt.Printf("  Difficulty: %d  |  Total Blocks: %d\n", difficulty, len(bc.Blocks))
+	fmt.Println(strings.Repeat("=", 60))
 
 	for i, block := range bc.Blocks {
-		fmt.Printf("\n Block %d:\n", i)
-		fmt.Printf("   Timestamp: %d\n", block.Timestamp)
-		fmt.Printf("   Data: %s\n", block.Data)
-		fmt.Printf("   Hash: %x\n", block.Hash)
+		fmt.Printf("\n  ┌── Block #%d ──\n", i)
+		fmt.Printf("  │  Timestamp: %s\n", time.Unix(block.Timestamp, 0).Format("15:04:05"))
 
-		if i > 0 {
-			fmt.Printf("   Previous Hash: %x\n", block.PrevHash)
+		if len(block.Transactions) == 0 {
+			fmt.Printf("  │  Transactions: None (Genesis)\n")
+		} else {
+			fmt.Printf("  │  Transactions:\n")
+			for j, tx := range block.Transactions {
+				fmt.Printf("  │    %d. %s → %s: %d coins\n",
+					j+1, tx.From, tx.To, tx.Amount)
+			}
 		}
+
+		fmt.Printf("  │  Nonce: %d\n", block.Nonce)
+		fmt.Printf("  │  Hash: %x\n", block.Hash[:12])
+		if i > 0 {
+			fmt.Printf("  │  Prev: %x\n", block.PrevHash[:12])
+		}
+		fmt.Printf("  └──\n")
 	}
-	fmt.Println("=========================")
+	fmt.Println(strings.Repeat("=", 60))
 }
 
 func (bc *Blockchain) Validate() bool {
