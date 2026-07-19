@@ -13,37 +13,44 @@ func main() {
 	fmt.Println("**Creating Blockchain...")
 	bc := blockchain.NewBlockchain()
 
-	fmt.Println("\n**Creating Transactions...")
-	txs := []blockchain.Transaction{
-		{
-			From:   "Alice",
-			To:     "Bob",
-			Amount: 5,
-		},
-		{
-			From:   "Bob",
-			To:     "Charlie",
-			Amount: 2,
-		},
-		{
-			From:   "Charlie",
-			To:     "Het",
-			Amount: 1,
-		},
+	// Create mempool with size 50
+	mp := blockchain.NewMempool(50)
+
+	// Set difficulty
+	blockchain.Difficulty = 2
+
+	fmt.Println("\nLoading Transactions form file...")
+	txs, err := blockchain.LoadTransactionsFromFileSimple("transactions.json")
+
+	if err != nil {
+		fmt.Printf("Error loading transactions: %v\n", err)
+		fmt.Println("Using fallback transactions...")
+
+		// Fallback transactions
+		txs = []blockchain.Transaction{
+			{From: "Alice", To: "Bob", Amount: 5},
+			{From: "Bob", To: "Charlie", Amount: 3},
+			{From: "Charlie", To: "Dave", Amount: 2},
+		}
 	}
 
-	fmt.Println("**Mining Block...")
-	bc.AddBlock(txs)
+	// Add transactions to mempool
+	fmt.Println("\nAdding transactions to mempool...")
+	mp.AddTransactions(txs)
+
+	// Mine transactions from mempool
+	fmt.Println("\nMining block from mempool...")
+	mp.MinePendingTransactions(bc)
 
 	elapsed := time.Since(start)
-	fmt.Printf("\n**Mining completed in: %s\n\n", elapsed)
+	fmt.Printf("\nMining completed in: %s\n\n", elapsed)
 
 	// Print blockchain
-	fmt.Println("**BLOCKCHAIN:")
+	fmt.Println("BLOCKCHAIN:")
 	bc.Print()
 
-	// Validate
-	fmt.Println("\n**VALIDATION:")
+	// Validate blockchain
+	fmt.Println("\nVALIDATION:")
 	if bc.Validate() {
 		fmt.Println("Blockchain is valid!")
 	} else {
@@ -51,15 +58,21 @@ func main() {
 	}
 
 	// Test tampering
-	fmt.Println("\n**TAMPER TEST:")
-	fmt.Printf("Before: Block 1, Transaction 1 Amount = %d\n", bc.Blocks[1].Transactions[0].Amount)
-	bc.Blocks[1].Transactions[0].Amount = 100 // Tamper!
-	fmt.Printf("After:  Block 1, Transaction 1 Amount = %d\n", bc.Blocks[1].Transactions[0].Amount)
+	fmt.Println("\nTAMPER TEST:")
+	if len(bc.Blocks) > 1 {
+		fmt.Printf("Before: Block 1, Transaction 1 Amount = %d\n", bc.Blocks[2].Transactions[3].Amount)
 
-	fmt.Println("\n**VALIDATING AFTER TAMPERING:")
-	if bc.Validate() {
-		fmt.Println("Blockchain is valid!")
+		bc.Blocks[2].Transactions[3].Amount = 100 // Tamper
+
+		fmt.Printf("After:  Block 1, Transaction 1 Amount = %d\n", bc.Blocks[2].Transactions[3].Amount)
+
+		fmt.Println("\nVALIDATING AFTER TAMPERING:")
+		if bc.Validate() {
+			fmt.Println("Blockchain is valid!")
+		} else {
+			fmt.Println("Blockchain is INVALID! Tampering detected!")
+		}
 	} else {
-		fmt.Println("Blockchain is INVALID! Tampering detected!")
+		fmt.Println("Not enough blocks to test tampering")
 	}
 }

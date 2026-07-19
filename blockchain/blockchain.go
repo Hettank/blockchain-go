@@ -8,18 +8,22 @@ import (
 )
 
 type Blockchain struct {
-	Blocks []*Block
+	Blocks  []*Block
+	Mempool *Mempool
 }
 
-var difficulty = 1
+var Difficulty = 1
 
 func NewBlockchain() *Blockchain {
 	genesisBlock := NewBlock([]Transaction{}, []byte{})
 
-	genesisBlock.MineBlock(difficulty)
+	genesisBlock.MineBlock(Difficulty)
 
 	return &Blockchain{
 		Blocks: []*Block{genesisBlock},
+		Mempool: &Mempool{
+			Transactions: []Transaction{},
+		},
 	}
 }
 
@@ -27,23 +31,10 @@ func (bc *Blockchain) GetLatestBlock() *Block {
 	return bc.Blocks[len(bc.Blocks)-1]
 }
 
-func (bc *Blockchain) AddBlock(transaction []Transaction) {
-	latestBlock := bc.GetLatestBlock()
-
-	// Create the block
-	newBlock := NewBlock(transaction, latestBlock.Hash)
-
-	// Mine a block
-	newBlock.MineBlock(difficulty)
-
-	// Append to the blockchain
-	bc.Blocks = append(bc.Blocks, newBlock)
-}
-
 func (bc *Blockchain) Print() {
 	fmt.Println("\n" + strings.Repeat("=", 60))
 	fmt.Printf("  BLOCKCHAIN\n")
-	fmt.Printf("  Difficulty: %d  |  Total Blocks: %d\n", difficulty, len(bc.Blocks))
+	fmt.Printf("  Difficulty: %d  |  Total Blocks: %d\n", Difficulty, len(bc.Blocks))
 	fmt.Println(strings.Repeat("=", 60))
 
 	for i, block := range bc.Blocks {

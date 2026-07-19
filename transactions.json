@@ -1,0 +1,252 @@
+[
+  {
+    "from": "Alice",
+    "to": "Bob",
+    "amount": 5
+  },
+  {
+    "from": "Bob",
+    "to": "Charlie",
+    "amount": 3
+  },
+  {
+    "from": "Charlie",
+    "to": "Dave",
+    "amount": 2
+  },
+  {
+    "from": "Dave",
+    "to": "Eve",
+    "amount": 7
+  },
+  {
+    "from": "Eve",
+    "to": "Frank",
+    "amount": 1
+  },
+  {
+    "from": "Frank",
+    "to": "Grace",
+    "amount": 4
+  },
+  {
+    "from": "Grace",
+    "to": "Het",
+    "amount": 6
+  },
+  {
+    "from": "Het",
+    "to": "Ivy",
+    "amount": 2
+  },
+  {
+    "from": "Ivy",
+    "to": "Jack",
+    "amount": 8
+  },
+  {
+    "from": "Jack",
+    "to": "Kate",
+    "amount": 3
+  },
+  {
+    "from": "Kate",
+    "to": "Leo",
+    "amount": 5
+  },
+  {
+    "from": "Leo",
+    "to": "Mia",
+    "amount": 1
+  },
+  {
+    "from": "Mia",
+    "to": "Noah",
+    "amount": 9
+  },
+  {
+    "from": "Noah",
+    "to": "Olivia",
+    "amount": 4
+  },
+  {
+    "from": "Olivia",
+    "to": "Peter",
+    "amount": 2
+  },
+  {
+    "from": "Peter",
+    "to": "Quinn",
+    "amount": 6
+  },
+  {
+    "from": "Quinn",
+    "to": "Rose",
+    "amount": 3
+  },
+  {
+    "from": "Rose",
+    "to": "Sam",
+    "amount": 7
+  },
+  {
+    "from": "Sam",
+    "to": "Tina",
+    "amount": 1
+  },
+  {
+    "from": "Tina",
+    "to": "Uma",
+    "amount": 5
+  },
+  {
+    "from": "Uma",
+    "to": "Victor",
+    "amount": 2
+  },
+  {
+    "from": "Victor",
+    "to": "Wendy",
+    "amount": 8
+  },
+  {
+    "from": "Wendy",
+    "to": "Xander",
+    "amount": 3
+  },
+  {
+    "from": "Xander",
+    "to": "Yara",
+    "amount": 4
+  },
+  {
+    "from": "Yara",
+    "to": "Zane",
+    "amount": 6
+  },
+  {
+    "from": "Zane",
+    "to": "Alice",
+    "amount": 2
+  },
+  {
+    "from": "Bob",
+    "to": "Dave",
+    "amount": 5
+  },
+  {
+    "from": "Charlie",
+    "to": "Eve",
+    "amount": 3
+  },
+  {
+    "from": "Dave",
+    "to": "Frank",
+    "amount": 7
+  },
+  {
+    "from": "Eve",
+    "to": "Grace",
+    "amount": 2
+  },
+  {
+    "from": "Frank",
+    "to": "Het",
+    "amount": 4
+  },
+  {
+    "from": "Grace",
+    "to": "Jack",
+    "amount": 1
+  },
+  {
+    "from": "Het",
+    "to": "Leo",
+    "amount": 9
+  },
+  {
+    "from": "Ivy",
+    "to": "Mia",
+    "amount": 3
+  },
+  {
+    "from": "Jack",
+    "to": "Noah",
+    "amount": 5
+  },
+  {
+    "from": "Kate",
+    "to": "Olivia",
+    "amount": 2
+  },
+  {
+    "from": "Leo",
+    "to": "Quinn",
+    "amount": 6
+  },
+  {
+    "from": "Mia",
+    "to": "Rose",
+    "amount": 4
+  },
+  {
+    "from": "Noah",
+    "to": "Tina",
+    "amount": 7
+  },
+  {
+    "from": "Olivia",
+    "to": "Uma",
+    "amount": 1
+  },
+  {
+    "from": "Peter",
+    "to": "Wendy",
+    "amount": 3
+  },
+  {
+    "from": "Quinn",
+    "to": "Yara",
+    "amount": 8
+  },
+  {
+    "from": "Rose",
+    "to": "Alice",
+    "amount": 5
+  },
+  {
+    "from": "Sam",
+    "to": "Bob",
+    "amount": 2
+  },
+  {
+    "from": "Tina",
+    "to": "Charlie",
+    "amount": 6
+  },
+  {
+    "from": "Uma",
+    "to": "Dave",
+    "amount": 4
+  },
+  {
+    "from": "Victor",
+    "to": "Eve",
+    "amount": 3
+  },
+  {
+    "from": "Wendy",
+    "to": "Frank",
+    "amount": 7
+  },
+  {
+    "from": "Xander",
+    "to": "Grace",
+    "amount": 1
+  },
+  {
+    "from": "Yara",
+    "to": "Het",
+    "amount": 5
+  }
+]
