@@ -56,35 +56,36 @@ func (m *Mempool) AddTransactions(txs []Transaction) int {
 }
 
 func (m *Mempool) MinePendingTransactions(bc *Blockchain) {
-	bunch := 5
-	transactions := []Transaction{}
+	const MaxTransactionsPerBlock = 5
 
-	if len(m.Transactions) < bunch {
-		bunch = len(m.Transactions)
+	// Check if there are transactions
+	if len(m.Transactions) == 0 {
+		fmt.Println("No transactions in mempool to mine")
+		return
 	}
 
-	fmt.Printf("Mining block with %d transactions...\n\n", len(transactions))
-
-	for i := 0; i < len(m.Transactions); i++ {
-		for j := 0; j < bunch; j++ {
-			transactions = m.Transactions[:bunch]
-
-			m.Transactions = m.Transactions[bunch:]
-
-			// Get previous block hash
-			latestBlock := bc.GetLatestBlock().Hash
-
-			// Create a new block
-			newBlock := NewBlock(transactions, latestBlock)
-
-			// Mine the block
-			newBlock.MineBlock(Difficulty)
-
-			// append block in a blockchain
-			bc.Blocks = append(bc.Blocks, newBlock)
+	for len(m.Transactions) > 0 {
+		count := MaxTransactionsPerBlock
+		if len(m.Transactions) < count {
+			count = len(m.Transactions)
 		}
-	}
 
-	fmt.Printf("Block mined! Total blocks: %d, Mempool remaining: %d\n",
-		len(bc.Blocks), len(m.Transactions))
+		// Take transactions from the front
+		transactions := m.Transactions[:count]
+
+		// Remove them from mempool
+		m.Transactions = m.Transactions[count:]
+
+		// Get previous block hash
+		latestBlock := bc.GetLatestBlock()
+
+		// Create a new block
+		newBlock := NewBlock(transactions, latestBlock.Hash)
+
+		// Mine the block
+		newBlock.MineBlock(Difficulty)
+
+		// Append block to blockchain
+		bc.Blocks = append(bc.Blocks, newBlock)
+	}
 }

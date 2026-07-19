@@ -13,9 +13,6 @@ func main() {
 	fmt.Println("**Creating Blockchain...")
 	bc := blockchain.NewBlockchain()
 
-	// Create mempool with size 50
-	mp := blockchain.NewMempool(50)
-
 	// Set difficulty
 	blockchain.Difficulty = 2
 
@@ -36,11 +33,11 @@ func main() {
 
 	// Add transactions to mempool
 	fmt.Println("\nAdding transactions to mempool...")
-	mp.AddTransactions(txs)
+	bc.Mempool.AddTransactions(txs)
 
 	// Mine transactions from mempool
 	fmt.Println("\nMining block from mempool...")
-	mp.MinePendingTransactions(bc)
+	bc.Mempool.MinePendingTransactions(bc)
 
 	elapsed := time.Since(start)
 	fmt.Printf("\nMining completed in: %s\n\n", elapsed)

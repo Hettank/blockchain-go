@@ -20,10 +20,8 @@ func NewBlockchain() *Blockchain {
 	genesisBlock.MineBlock(Difficulty)
 
 	return &Blockchain{
-		Blocks: []*Block{genesisBlock},
-		Mempool: &Mempool{
-			Transactions: []Transaction{},
-		},
+		Blocks:  []*Block{genesisBlock},
+		Mempool: NewMempool(50),
 	}
 }
 
