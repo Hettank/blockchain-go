@@ -17,24 +17,36 @@ func NewMempool(maxSize int) *Mempool {
 }
 
 func (m *Mempool) AddTransaction(tx Transaction) bool {
+	// Check size limit
 	if len(m.Transactions) >= m.MaxSize {
 		fmt.Printf("Mempool is FULL! (Limit: %d)\n", m.MaxSize)
 		fmt.Printf("   Transaction %s→%s rejected\n", tx.From, tx.To)
 		return false
 	}
 
+	// Check amount
 	if tx.Amount <= 0 {
 		fmt.Println("Invalid transaction: amount must be positive")
 		return false
 	}
 
+	// Check sender != receiver
 	if tx.From == tx.To {
 		fmt.Println("Invalid transaction: sender and receiver same")
 		return false
 	}
 
+	// NEW: Verify transaction signature
+	if !tx.Verify() {
+		fmt.Printf("Invalid transaction: signature verification failed!\n")
+		fmt.Printf("   From: %s, To: %s, Amount: %d\n", tx.From, tx.To, tx.Amount)
+		return false
+	}
+
 	// Add to mempool
 	m.Transactions = append(m.Transactions, tx)
+	fmt.Printf("Transaction added to mempool: %s → %s: %d coins\n",
+		tx.From, tx.To, tx.Amount)
 	return true
 }
 
@@ -64,6 +76,9 @@ func (m *Mempool) MinePendingTransactions(bc *Blockchain) {
 		return
 	}
 
+	fmt.Printf("Mining %d transactions from mempool...\n", len(m.Transactions))
+
+	blocksMined := 0
 	for len(m.Transactions) > 0 {
 		count := MaxTransactionsPerBlock
 		if len(m.Transactions) < count {
@@ -87,5 +102,15 @@ func (m *Mempool) MinePendingTransactions(bc *Blockchain) {
 
 		// Append block to blockchain
 		bc.Blocks = append(bc.Blocks, newBlock)
+		blocksMined++
+
+		fmt.Printf("Mined block #%d with %d transactions (Remaining: %d)\n",
+			blocksMined, count, len(m.Transactions))
 	}
+
+	fmt.Printf("Mining complete! Mined %d blocks.\n", blocksMined)
+}
+
+func (m *Mempool) Count() int {
+	return len(m.Transactions)
 }
