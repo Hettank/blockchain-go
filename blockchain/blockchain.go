@@ -10,6 +10,7 @@ import (
 type Blockchain struct {
 	Blocks  []*Block
 	Mempool *Mempool
+	Ledger  map[string]int
 }
 
 var Difficulty = 1
@@ -22,11 +23,25 @@ func NewBlockchain() *Blockchain {
 	return &Blockchain{
 		Blocks:  []*Block{genesisBlock},
 		Mempool: NewMempool(50),
+		Ledger:  make(map[string]int),
 	}
 }
 
 func (bc *Blockchain) GetLatestBlock() *Block {
 	return bc.Blocks[len(bc.Blocks)-1]
+}
+
+func (bc *Blockchain) GetBalance(address string) int {
+	return bc.Ledger[address]
+}
+
+func (bc *Blockchain) ApplyTransaction(tx Transaction) {
+	bc.Ledger[tx.From] -= tx.Amount
+	bc.Ledger[tx.To] += tx.Amount
+}
+
+func (bc *Blockchain) HasSufficientBalance(tx Transaction) bool {
+	return bc.GetBalance(tx.From) >= tx.Amount
 }
 
 func (bc *Blockchain) Print() {
