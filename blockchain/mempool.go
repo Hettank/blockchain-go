@@ -67,7 +67,7 @@ func (m *Mempool) AddTransactions(txs []Transaction) int {
 	return added
 }
 
-func (m *Mempool) MinePendingTransactions(bc *Blockchain) {
+func (m *Mempool) MinePendingTransactions(bc *Blockchain, minerAddress string) {
 	const MaxTransactionsPerBlock = 5
 
 	// Check if there are transactions
@@ -95,13 +95,21 @@ func (m *Mempool) MinePendingTransactions(bc *Blockchain) {
 		latestBlock := bc.GetLatestBlock()
 
 		// Create a new block
-		newBlock := NewBlock(transactions, latestBlock.Hash)
+		newBlock := NewBlock(transactions, latestBlock.Hash, minerAddress)
 
 		// Mine the block
 		newBlock.MineBlock(Difficulty)
 
 		// Append block to blockchain
 		bc.Blocks = append(bc.Blocks, newBlock)
+
+		// Apply transactions
+		for _, tx := range transactions {
+			bc.ApplyTransaction(tx)
+		}
+
+		bc.Ledger[minerAddress] += newBlock.Reward
+
 		blocksMined++
 
 		fmt.Printf("Mined block #%d with %d transactions (Remaining: %d)\n",

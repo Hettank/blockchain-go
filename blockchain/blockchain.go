@@ -15,8 +15,10 @@ type Blockchain struct {
 
 var Difficulty = 1
 
+const MiningReward = 50
+
 func NewBlockchain() *Blockchain {
-	genesisBlock := NewBlock([]Transaction{}, []byte{})
+	genesisBlock := NewBlock([]Transaction{}, []byte{}, "")
 
 	genesisBlock.MineBlock(Difficulty)
 
@@ -42,6 +44,37 @@ func (bc *Blockchain) ApplyTransaction(tx Transaction) {
 
 func (bc *Blockchain) HasSufficientBalance(tx Transaction) bool {
 	return bc.GetBalance(tx.From) >= tx.Amount
+}
+
+func (bc *Blockchain) ValidateTransactions(txs []Transaction) []Transaction {
+
+	tempLedger := make(map[string]int)
+
+	// Copy current ledger
+	for address, balance := range bc.Ledger {
+		tempLedger[address] = balance
+	}
+
+	validTransactions := []Transaction{}
+
+	// Validate and simulate each transaction
+	for _, tx := range txs {
+
+		if !tx.Verify() {
+			continue
+		}
+
+		if tempLedger[tx.From] < tx.Amount {
+			continue
+		}
+
+		tempLedger[tx.From] -= tx.Amount
+		tempLedger[tx.To] += tx.Amount
+
+		validTransactions = append(validTransactions, tx)
+	}
+
+	return validTransactions
 }
 
 func (bc *Blockchain) Print() {
